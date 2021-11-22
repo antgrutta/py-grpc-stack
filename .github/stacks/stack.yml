@@ -1,0 +1,31 @@
+version: "0.1.0"
+
+name: Python gRPC Stack
+description: A stack to build and publish a Python gRPC service.
+
+branding:
+  icon: "layers"
+  color: "blue"
+
+inputs:
+  - name: PYTHON_VERSION
+    default: "3.7"
+    description: The version of Python to use.
+    validvalues:
+      - "3.7"
+      - "3.8"
+      - "3.9"
+    required: true
+
+  - name: GRPC_SERVICE_NAME
+    default: GRPCService
+    description: The name of the gRPC service.
+    required: true
+
+  - name: GRPC_PACKAGE_NAME
+    default: example.service
+    description: The name of the gRPC package.
+    required: true
+
+init:
+  uses: "stack-init.yml"

@@ -1,0 +1,12 @@
+# Docker Ignore to prevent unwanted files in
+
+# Ignore folders
+.venv
+venv
+__pycache__
+
+# Ignore files
+**/*.pyc
+.gitignore
+License
+README.md

@@ -1,0 +1,76 @@
+name: Stack Initializer
+
+on:
+  workflow_dispatch:
+    inputs:
+      PYTHON_VERSION:
+        description: "The Python version to use for the stack."
+        required: true
+      GRPC_SERVICE_NAME:
+        description: "The name of the service to initialize."
+        required: true
+      GRPC_PACKAGE_NAME:
+        description: "The name of the package to initialize."
+        required: true
+jobs:
+  stack-init:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v2
+
+      - name: "Render Dockerfile"
+        uses: cuchi/jinja2-action@v1.2.0
+        with:
+          template: ".github/project_templates/Dockerfile.j2"
+          output_file: Dockerfile
+          strict: true
+          variables: |
+            PYTHON_VERSION=${{ github.event.inputs.PYTHON_VERSION }}
+
+      - name: "Create protobufs directory"
+        run: mkdir -p protobufs
+
+      - name: Render protobufs
+        uses: cuchi/jinja2-action@v1.2.0
+        with:
+          template: .github/project_templates/protobufs/service.proto.j2
+          output_file: protobufs/service.proto
+          strict: true
+          variables: |
+            GRPC_SERVICE_NAME=${{ github.event.inputs.GRPC_SERVICE_NAME }}
+            GRPC_PACKAGE_NAME=${{ github.event.inputs.GRPC_PACKAGE_NAME }}
+
+      - name: "Create services directory"
+        run: mkdir -p services
+
+      - name: "Render service class"
+        uses: cuchi/jinja2-action@v1.2.0
+        with:
+          template: .github/project_templates/services/service.py.j2
+          output_file: services/service.py
+          strict: true
+          variables: |
+            GRPC_SERVICE_NAME=${{ github.event.inputs.GRPC_SERVICE_NAME }}
+
+      - name: "Render app file"
+        uses: cuchi/jinja2-action@v1.2.0
+        with:
+          template: .github/project_templates/app.py.j2
+          output_file: app.py
+          strict: true
+          variables: |
+            GRPC_SERVICE_NAME=${{ github.event.inputs.GRPC_SERVICE_NAME }}
+
+      - name: Configure git
+        run: |
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+
+      - name: Commit generated code and initialize workflows
+        run: |
+          git add .
+          git commit -m "Generate framework code and initialize workflows"
+          git push origin -u main

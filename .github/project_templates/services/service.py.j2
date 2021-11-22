@@ -1,0 +1,44 @@
+import logging
+import random
+import string
+import sys
+
+import grpc
+from config import Config
+from messages import service_pb2 as {{ GRPC_SERVICE_NAME }}_messages
+from messages import service_pb2_grpc as {{ GRPC_SERVICE_NAME }}_service
+
+# Logging Settings
+logging.basicConfig(stream=sys.stdout,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=Config.LOGLEVEL,
+                    datefmt='%Y-%m-%d %H:%M:%S')
+logger = logging.getLogger()
+
+
+class {{ GRPC_SERVICE_NAME }}({{ GRPC_SERVICE_NAME }}_service.{{ GRPC_SERVICE_NAME }}Servicer):
+
+    def create(self, request, context):
+        logger.info("Received request: %s", request)
+
+        return {{ GRPC_SERVICE_NAME }}_messages.CreateReply(message=request.message)
+
+    def update(self, request, context):
+        logger.info("Received request: %s", request)
+
+        return {{ GRPC_SERVICE_NAME }}_messages.UpdateReply(message=request.message)
+
+    def delete(self, request, context):
+        logger.info("Received request: %s", request)
+
+        return {{ GRPC_SERVICE_NAME }}_messages.DeleteReply(message=request.message)
+
+    def get(self, request, context):
+        logger.info("Received request: %s", request)
+
+        return {{ GRPC_SERVICE_NAME }}_messages.GetReply(message=request.message)
+
+    def list(self, request, context):
+        logger.info("Received request: %s", request)
+
+        return {{ GRPC_SERVICE_NAME }}_messages.CreateReply(message=request.message)

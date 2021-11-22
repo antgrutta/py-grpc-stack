@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package {{ GRPC_PACKAGE_NAME }};
+
+service {{ GRPC_SERVICE_NAME }} {
+  rpc create(CreateRequest) returns (CreateReply) {};
+  rpc update(UpdateRequest) returns (UpdateReply) {};
+  rpc delete(DeleteRequest) returns (DeleteReply) {};
+  rpc get(GetRequest) returns (GetReply) {};
+  rpc list(ListRequest) returns (ListReply) {};
+}
+
+message CreateRequest {
+  string message = 1;
+}
+
+message CreateReply {
+  string message = 1;
+}
+
+message UpdateRequest {
+  string message = 1;
+}
+
+message UpdateReply {
+  string message = 1;
+}
+
+message DeleteRequest {
+  string message = 1;
+}
+
+message DeleteReply {
+  string message = 1;
+}
+
+message GetRequest {
+  string message = 1;
+}
+
+message GetReply {
+  string message = 1;
+}
+
+message ListRequest {
+  string message = 1;
+}
+
+message ListReply {
+  string message = 1;
+}
